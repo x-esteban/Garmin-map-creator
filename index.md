@@ -59,4 +59,84 @@ with os.scandir('fit') as entries: #Scanning our directory.
         point_list.append(parser(entry))
 ```
 
-![Image](src)
+## 2. Creating our map
+
+Our objective is to display all our routes on a single map, which can be achieved quite easily now that our *.fit* files are nicely parsed. Our tool of choice will be **Folium**, since it supports a variety of [tiles](https://pypi.org/project/folium/0.1.4/) and built-in functions to make our maps more visually appealing. For this example I have chosen the tileset **OpenStreetMap**, as it provides a great deal of information on towns, roads and intersections.
+
+To create a map with **Folium** we would usually need to pass the center coordinates, but in this case we will use the function *fit_bounds* to automatically center our map on the displayed routes with the according zoom level.
+
+```
+fit_map = folium.Map(tiles="openstreetmap") #Calling our tiles.
+
+for i in point_list: #Using a loop to add every route to the map.
+    try:
+        folium.PolyLine(i, color='blue', weight=1.5, opacity=0.8).add_to(fit_map) #Tweaking line parameters.
+    except:
+        pass
+    
+fit_map.fit_bounds(fit_map.get_bounds()) #Fitting our map to the routes, at max zoom.
+```
+
+Once our map has finished rendering we can display it like so.
+
+```
+fit_map
+```
+
+We will be greeted with a map similar to this. While this is a static image, the real map is fully interactive and zoomable.
+
+![Image](https://i.ibb.co/ZHXmsds/openstreetmap.png)
+
+We can change the line color, width and transparency by modifying the parameters shown in the code above.
+
+If we need to display the map elsewhere or simple save it, we can achieve it by this simple command:
+
+```
+fit_map.save(outfile= "<map_name>.html")
+```
+
+It will be stored in the same folder as our notebook.
+
+
+## 3. Giving every ride a different color.
+
+While the previous map achieved its purpose, it was quite difficult to make out every single ride unless we zoomed right in. This could be fixed by giving each ride a random color and displaying them on a dark, minimalist tileset such as the one provided by **CartoDB Dark Matter**.
+
+First, let's import the *random* library to perform our random choices.
+
+```
+import random
+```
+
+Defining a list of colors for the routes. The dark ones have been left out since they don't pop on a black map.
+
+```
+color_list = ['red', 'blue', 'green', 'purple', 'orange', 'lightred', 'cadetblue', 'pink', 'lightblue', 'lightgreen']
+```
+
+Creating our map.
+
+```
+color_map = folium.Map(tiles="cartodbdark_matter")
+
+for i in point_list:
+    try:
+        folium.PolyLine(i, color=random.choice(color_list), weight=1.5, opacity=1).add_to(color_map)
+    except:
+        pass
+    
+color_map.fit_bounds(color_map.get_bounds())
+```
+
+Displaying our map.
+
+```
+color_map
+```
+The result will be quite similar to this (with different routes, of course):
+
+![Image](https://i.ibb.co/dGHjcxW/cartoDB1.png)
+
+The different colors make our routes more easily distinguished, especially if we zoom in.
+
+![Image](https://i.ibb.co/X7rZBxg/cartoDB2.png)
