@@ -1,2 +1,2 @@
 # Garmin-map-creator
-Display all your bike rides in a single custom map.
+Display all your bike rides on a single custom map.
