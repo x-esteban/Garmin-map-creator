@@ -43,7 +43,7 @@ def parser (file):
         for frame in fit:
             if isinstance(frame, fitdecode.FitDataMessage):
                 try:
-                    points.append(tuple([(frame.get_value('position_lat')/ ((2**32)/360)), #Appending the lat.
+                    points.append(tuple([(frame.get_value('position_lat')/ ((2**32)/360)), #Appending lat.
                                          (frame.get_value('position_long')/ ((2**32)/360))])) #Appending long.
                 except:
                     pass
@@ -70,7 +70,7 @@ fit_map = folium.Map(tiles="openstreetmap") #Calling our tiles.
 
 for i in point_list: #Using a loop to add every route to the map.
     try:
-        folium.PolyLine(i, color='blue', weight=1.5, opacity=0.8).add_to(fit_map) #Tweaking line parameters.
+        folium.PolyLine(i, color='blue', weight=1.5, opacity=0.8).add_to(fit_map) #Line parameters.
     except:
         pass
     
@@ -140,3 +140,6 @@ The result will be quite similar to this (with different routes, of course):
 The different colors make our routes more easily distinguished, especially if we zoom in.
 
 ![Image](https://i.ibb.co/X7rZBxg/cartoDB2.png)
+
+
+![Image](https://i.ibb.co/JyCGJ4J/cartoDB3.png)
